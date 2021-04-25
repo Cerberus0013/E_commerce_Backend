@@ -1,40 +1,73 @@
-const router = require('express').Router();
-const { Product, Category, Tag, ProductTag } = require('../../models');
+const router = require("express").Router();
+const { Product, Category, Tag, ProductTag } = require("../../models");
 
 // The `/api/products` endpoint
 
 // get all products
-router.get('/', (req, res) => {
-Product.findAll({
-  // find all products
-  // be sure to include its associated Category and Tag data
-    
-  }).then((dbProduct) => {
-    res.json(dbProduct)
-  }).catch((err) => {
+router.get("/", (req, res) => {
+  Product.findAll({
+    include: [
+      {
+        model: "Category",
+        attributes: ["category_id"],
+      },
+    ],
+    include: [
+      {
+        model: "ProductTag",
+        attributes: ["tag_id"],
+      },
+    ],
+    // find all products
+    // be sure to include its associated Category and Tag data
+  })
+    .then((dbProduct) => {
+      res.json(dbProduct);
+    })
+    .catch((err) => {
       console.log(err);
       res.status(500).json(err);
-    })
+    });
 });
 
 // get one product
-router.get('/:id', (req, res) => {
+router.get("/:id", (req, res) => {
   Product.findOne({
-    
+    where: {
+      id: req.params.id,
+    },
+    include: [
+      {
+        model: "Category",
+        attributes: ["category_id"],
+      },
+    ],
+    include: [
+      {
+        model: "ProductTag",
+        attributes: ["tag_id"],
+      },
+    ],
+
     // find a single product by its `id`
     // be sure to include its associated Category and Tag data
-  }).then((dbProduct) => {
-    res.json(dbProduct)
-  }).catch((err) => {
+  })
+    .then((dbProduct) => {
+      res.json(dbProduct);
+    })
+    .catch((err) => {
       console.log(err);
       res.status(500).json(err);
-    })
+    });
 });
 
 // create new product
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
   Product.create({
-    
+    product_name: req.body.product_name,
+    price: req.params.price,
+    stock: req.params.stock,
+    category_id: req.params.category_id,
     /* req.body should look like this...
       {
         product_name: "Basketball",
@@ -43,12 +76,15 @@ router.post('/', (req, res) => {
         tagIds: [1, 2, 3, 4]
       }
     */
-  }).then((dbProduct) => {
-    res.json(dbProduct)
-  }).catch((err) => {
+  })
+    .then((dbProduct) => {
+      res.json(dbProduct);
+    })
+    .catch((err) => {
       console.log(err);
       res.status(500).json(err);
-    })
+    });
+
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
@@ -72,7 +108,7 @@ router.post('/', (req, res) => {
 });
 
 // update product
-router.put('/:id', (req, res) => {
+router.put("/:id", (req, res) => {
   // update product data
   Product.update(req.body, {
     where: {
@@ -113,7 +149,7 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete("/:id", (req, res) => {
   // delete one product by its `id` value
 });
 

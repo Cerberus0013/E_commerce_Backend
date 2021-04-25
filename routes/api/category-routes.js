@@ -5,34 +5,43 @@ const { Category, Product } = require('../../models');
 
 router.get('/', (req, res) => {
   Category.findAll({
-
+    include:[{
+      model: Product,
+      attributes:['product_name']
+    }]
+    // find all categories
+    // be sure to include its associated Products
   }).then((dbCategory) => {
     res.json(dbCategory)
   }).catch((err) => {
       console.log(err);
       res.status(500).json(err);
     })
-  // find all categories
-  // be sure to include its associated Products
 });
 
 router.get('/:id', (req, res) => {
   Category.findOne({
-
-
+    where: {
+      id: req.params.id,
+    },
+    include: [{
+      model: Product,
+      attributes:['product_name']
+    }]
+    // find one category by its `id` value
+    // be sure to include its associated Products
   }).then((dbCategory) => {
     res.json(dbCategory)
   }).catch((err) => {
       console.log(err);
       res.status(500).json(err);
     })
-  // find one category by its `id` value
-  // be sure to include its associated Products
 });
 
 router.post('/', (req, res) => {
   Category.create({
-
+    category_name: req.body.category_name,
+ // create a new category
 
   }).then((dbCategory) => {
     res.json(dbCategory)
@@ -40,7 +49,6 @@ router.post('/', (req, res) => {
       console.log(err);
       res.status(500).json(err);
     })
-  // create a new category
 });
 
 router.put('/:id', (req, res) =>{ 
@@ -57,14 +65,18 @@ Category.update({
 
 router.delete('/:id', (req, res) => {
   Category.destroy({
-    
-    // delete a category by its `id` value
-  }).then((dbCategory) => {
-    res.json(dbCategory)
-  }).catch((err) => {
+    where: {
+      id: req.params.id,
+    },
+ // delete a category by its `id` value
+  })
+    .then((dbCategory) => {
+      res.json(dbCategory);
+    })
+    .catch((err) => {
       console.log(err);
       res.status(500).json(err);
-    })
+    });
   
 });
 
