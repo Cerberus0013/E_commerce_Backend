@@ -14,8 +14,8 @@ router.get("/", (req, res) => {
     ],
     include: [
       {
-        model: "ProductTag",
-        attributes: ["tag_id"],
+        model: "Tag",
+        attributes: ["tag_name"],
       },
     ],
     // find all products
@@ -44,8 +44,8 @@ router.get("/:id", (req, res) => {
     ],
     include: [
       {
-        model: "ProductTag",
-        attributes: ["tag_id"],
+        model: "Tag",
+        attributes: ["tag_name"],
       },
     ],
 
