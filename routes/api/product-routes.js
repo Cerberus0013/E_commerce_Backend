@@ -8,18 +8,17 @@ router.get("/", (req, res) => {
   Product.findAll({
     include: [
       {
-        model: "Category",
-        attributes: ["category_id"],
+        model: Category,
       },
     ],
-    include: [
+    include:[
       {
-        model: "Tag",
-        attributes: ["tag_name"],
+        model: Tag,
+        through: ProductTag,
       },
     ],
     // find all products
-    // be sure to include its associated Category and Tag data
+    // be sure to include its associgated Category and Tag data
   })
     .then((dbProduct) => {
       res.json(dbProduct);
@@ -38,14 +37,14 @@ router.get("/:id", (req, res) => {
     },
     include: [
       {
-        model: "Category",
-        attributes: ["category_id"],
+        model: Category,
+       
       },
     ],
     include: [
       {
-        model: "Tag",
-        attributes: ["tag_name"],
+        model: Tag,
+        through: ProductTag,
       },
     ],
 
@@ -63,28 +62,6 @@ router.get("/:id", (req, res) => {
 
 // create new product
 router.post("/", (req, res) => {
-  Product.create({
-    product_name: req.body.product_name,
-    price: req.params.price,
-    stock: req.params.stock,
-    category_id: req.params.category_id,
-    /* req.body should look like this...
-      {
-        product_name: "Basketball",
-        price: 200.00,
-        stock: 3,
-        tagIds: [1, 2, 3, 4]
-      }
-    */
-  })
-    .then((dbProduct) => {
-      res.json(dbProduct);
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(err);
-    });
-
   Product.create(req.body)
     .then((product) => {
       // if there's product tags, we need to create pairings to bulk create in the ProductTag model
@@ -150,6 +127,19 @@ router.put("/:id", (req, res) => {
 });
 
 router.delete("/:id", (req, res) => {
+
+Product.destroy({
+  where:{
+    id:req.params.id
+  }
+
+}).then((dbProduct) => {
+      res.json(dbProduct);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json(err);
+    });
   // delete one product by its `id` value
 });
 

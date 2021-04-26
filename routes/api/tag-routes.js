@@ -7,8 +7,8 @@ router.get("/", (req, res) => {
   Tag.findAll({
     include: [
       {
-        model: "Product",
-        attribute: ["product_name"],
+        model: Product,
+        through: ProductTag,
       },
     ],
     // find all tags
@@ -30,8 +30,8 @@ router.get("/:id", (req, res) => {
     },
     include: [
       {
-        model: "Product",
-        attribute: ["product_name"],
+        model: Product,
+        through: ProductTag,
       },
     ],
     // find a single tag by its `id`

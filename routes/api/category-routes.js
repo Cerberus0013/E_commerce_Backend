@@ -10,7 +10,7 @@ router.get("/", (req, res) => {
         model: Product,
         attributes: ["product_name"],
       },
-    ],
+     ],
     // find all categories
     // be sure to include its associated Products
   })
