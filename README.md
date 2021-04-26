@@ -1,8 +1,10 @@
 # E-commerce Back End
 
 ## Operational Video URL
+https://drive.google.com/file/d/15uO8hMuVv620m7Tx1ImOlPV-VoCq9eB4/view
 
 
+In this video you will be able to see a full functioning backend, tht ia able to accept and process all CRUD operations.
 
 ## Purpose
 This is the band end of an E-commerve site, where products are placed into categories and include search tags. a user it able to use CRUD impute in order to make changes to the database of products for this E-Commerce store.
